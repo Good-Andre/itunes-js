@@ -5,6 +5,17 @@ export const videoPlayerInit = () => {
   const videoProgress = document.querySelector('.video-progress');
   const videoTimePassed = document.querySelector('.video-time__passed');
   const videoTimeTotal = document.querySelector('.video-time__total');
+  const videoVolume = document.querySelector('.video-volume');
+  const videoFullscreen = document.querySelector('.video-fullscreen');
+// Дз новые переменные
+  const volumeOff = document.querySelector('.fa-volume-off');
+  const volumeMax = document.querySelector('.fa-volume-up');
+  let activePlayerVol = videoPlayer.volume;
+  let activeVideoVol = videoVolume.value;
+
+  videoFullscreen.addEventListener('click', () => {
+    videoPlayer.requestFullscreen();
+  });
 
   const toggleIcon = () => {
     if (videoPlayer.paused) {
@@ -16,7 +27,8 @@ export const videoPlayerInit = () => {
     }
   }
 
-  const togglePlay = () => {
+  const togglePlay = (e) => {
+    e.preventDefault();
     if (videoPlayer.paused) {
       videoPlayer.play();
     } else {
@@ -30,6 +42,37 @@ export const videoPlayerInit = () => {
   }
 
   const addZero = n => n < 10 ? '0' +n : n;
+
+  const changeValue = () => {
+    const valueVolume = videoVolume.value;
+    videoPlayer.volume = valueVolume / 100;
+    // сохранение состояния при изменении
+    activePlayerVol = videoPlayer.volume;
+    activeVideoVol = valueVolume;
+  }
+// Дз - функция переключение звука на максимум и возврат к прежнему
+  const maxValue = () => {
+    if (videoVolume.value < 100) {
+      videoVolume.value = 100;
+      videoPlayer.volume = 1;
+    } else if (videoVolume.value == 100) {
+      videoPlayer.volume = activePlayerVol;
+      videoVolume.value = activeVideoVol;
+    }
+  }
+// Дз - функция отключение звука и возврат к прежнему
+  const offValue = () => {
+    if (videoVolume.value > 0) {
+      videoVolume.value = 0;
+      videoPlayer.volume = 0;
+    } else if (videoVolume.value == 0) {
+      videoPlayer.volume = activePlayerVol;
+      videoVolume.value = activeVideoVol;
+    }
+  }
+  // Дз события для max/off
+  volumeMax.addEventListener('click', maxValue);
+  volumeOff.addEventListener('click', offValue);
 
   videoPlayer.addEventListener('click', togglePlay);
   videoButtonPlay.addEventListener('click', togglePlay);
@@ -56,10 +99,16 @@ export const videoPlayerInit = () => {
 
   });
 
-  videoProgress.addEventListener('change', () => {
+  videoProgress.addEventListener('input', () => {
     const duration = videoPlayer.duration;
     const value = videoProgress.value;
 
     videoPlayer.currentTime = (value * duration) / 100;
   });
+
+  videoVolume.addEventListener('input', changeValue);
+  videoVolume.addEventListener('volumechange', () => {
+    videoVolume.value = Math.round(videoPlayer.volume * 100);
+  });
+  changeValue();
 }
