@@ -8,8 +8,13 @@ input.video-volume {
 }
 .video-fullscreen,
 .fa-volume-up,
-.fa-volume-off {
+.fa-volume-off,
+.control-icon {
   cursor: pointer;
+}
+.control-icon {
+  font-size: 20px;
+  margin: 15px;
 }
 
 /*# sourceMappingURL=style.min.css.map */

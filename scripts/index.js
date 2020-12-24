@@ -6,10 +6,19 @@ const playerBtn = document.querySelectorAll('.player-btn');
 const playerBlock = document.querySelectorAll('.player-block');
 const temp = document.querySelector('.temp');
 
+const stopVideoPlayer = videoPlayerInit();
+const stopRadioPlayer = radioPlayerInit();
+musicPlayerInit();
+
 const deactivationPlayer = () => {
   temp.style.display = 'none';
   playerBtn.forEach(item => item.classList.remove('active'));
   playerBlock.forEach(item => item.classList.remove('active'));
+
+  stopVideoPlayer();
+  stopRadioPlayer();
+  // radioPlayerInit.stop();
+  // videoPlayerInit.stop();
 }
 
 playerBtn.forEach((btn, i) => btn.addEventListener('click', () => {
@@ -18,6 +27,7 @@ playerBtn.forEach((btn, i) => btn.addEventListener('click', () => {
     playerBlock[i].classList.add('active');
 }));
 
-radioPlayerInit();
-musicPlayerInit();
-videoPlayerInit();
+// radioPlayerInit();
+// musicPlayerInit();
+// videoPlayerInit();
+
